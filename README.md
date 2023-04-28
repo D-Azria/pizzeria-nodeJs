@@ -36,7 +36,7 @@ Les écrans ne sont pas contractuelles, n'hésitez pas à être force de proposi
 ### Administration
 
 - [ ] [USA001 - Authentification - Page Login](issues/admin/usa001.md)
-- [ ] :dart: [USA002 - Menu](issues/admin/usa002.md)
+- [X] :dart: [USA002 - Menu](issues/admin/usa002.md)
 - [ ] [USA003 - Utilisateur - CRUD](issues/admin/usa003.md)
 - [ ] :dart: [USA004 - Pizza - CRUD](issues/admin/usa004.md)
 - [ ] :dart: [USA005 - Livreur - CRUD](issues/admin/usa005.md)

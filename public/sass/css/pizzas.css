@@ -1,0 +1,41 @@
+#table-pizzas tr {
+  margin: 5px;
+  padding: 5px;
+}
+#table-pizzas tr td {
+  flex-flow: flex nowrap;
+  max-width: fit-content;
+  margin: 5px 0;
+  padding: 5px 3px;
+  background-color: aqua;
+  vertical-align: top;
+}
+#table-pizzas tr .pizz-actions {
+  display: flex;
+  flex-direction: row;
+  color: blue;
+}
+#table-pizzas tr .pizz-actions .modify {
+  background-color: rgb(249, 231, 90);
+  color: black;
+  padding: 3px 6px;
+  margin: 0 3px;
+  border-radius: 5px;
+}
+#table-pizzas tr .pizz-actions .modify:hover {
+  background-color: rgb(243, 239, 30);
+  color: rgb(149, 31, 47);
+}
+#table-pizzas tr .pizz-actions .delete {
+  background-color: red;
+  color: white;
+  padding: 3px 6px;
+  margin: 0 3px;
+  border-radius: 5px;
+}
+#table-pizzas tr .pizz-actions .delete:hover {
+  background-color: rgb(255, 120, 120);
+  color: rgb(0, 0, 0);
+}
+
+/*# sourceMappingURL=pizzas.css.map */

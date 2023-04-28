@@ -1,0 +1,42 @@
+#table-pizzas {
+  tr {
+    margin: 5px;
+    padding: 5px;
+    td {
+      flex-flow: flex nowrap;
+      max-width: fit-content;
+      margin: 5px 0;
+      padding: 5px 3px;
+      background-color: aqua;
+      vertical-align: top;
+      
+    }
+    .pizz-actions {
+      display: flex;
+      flex-direction: row;
+      color: blue;
+      .modify {
+        background-color: rgb(249, 231, 90);
+        color: black;
+        padding: 3px 6px;
+        margin: 0 3px;
+        border-radius: 5px;
+        &:hover {
+          background-color: rgb(243, 239, 30);
+          color: rgb(149, 31, 47);
+        }
+      }
+      .delete {
+        background-color: red;
+        color: white;
+        padding: 3px 6px;
+        margin: 0 3px;
+        border-radius: 5px;
+        &:hover {
+          background-color: rgb(255, 120, 120);
+          color: rgb(0, 0, 0);
+        }
+      }
+    }
+  }
+}
