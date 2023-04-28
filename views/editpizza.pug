@@ -30,34 +30,23 @@ html
         main
             section 
                 article 
-                    div
-                        h2 Pizzas à la carte
-                        a(href="/createpizza" id="newpizza") Créer une pizza
-                    table(id="table-pizzas")
-                        tr
-                        th ID
-                        th Code 
-                        th Label 
-                        th Ingrédients
-                        th Catégorie 
-                        th Prix 
-                        th Version 
-                        th Action 
-                        each pizza in pizzas 
-                            tr
-                                td #{pizza.id}
-                                td #{pizza.code}
-                                td #{pizza.label}
-                                td #{pizza.ingredients}
-                                td #{pizza.category}
-                                td #{pizza.price}€
-                                td v#{pizza.version}
-                                td(class="pizz-actions")  
-                                    a(href=`pizzas/edit/${pizza.id}`)
-                                        button(type="submit" class="modify") Editer
-                                    form(action=`pizzas/delete/${pizza.id}` method='POST' id="formdelete")
-                                        button(type="submit" class="delete") Supprimer
-
+                    h2 Éditer la pizza : "#{pizza.label}"
+                    a(href="/pizzas") Retour à la liste des pizzas
+                    form(action="/editpizza" method='POST' id="formeditpizza")
+                        div
+                            input(type="hidden" name="code" id="code" value=`${pizza.code}`)
+                            input(type="hidden" name="label" id="label" value=`${pizza.label}`)
+                            label(for="ing") Ingrédients
+                            input(type="text" name="ing" id="ing" value=`${pizza.ingredients}`)
+                        div
+                            label(for="cat") Catégorie 
+                            input(type="text" name="cat" id="cat" value=`${pizza.category}`)
+                        div
+                            label(for="price") Prix 
+                            input(type="number" name="price" id="price" value=`${pizza.price}`)
+                            input(name="version" id="version" value=`${pizza.version}` type="hidden")
+                        div    
+                            button(type="submit" name="edit" id="buttoneditpizza") Modifier la pizza
             aside 
                 h3 Aside title
                 p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?

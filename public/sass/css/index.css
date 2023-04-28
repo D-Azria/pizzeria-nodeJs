@@ -60,6 +60,7 @@ html main section {
   padding: 10px;
   border: solid;
   border-radius: 10px;
+  min-width: 600px;
 }
 html main aside {
   grid-column: 4;
