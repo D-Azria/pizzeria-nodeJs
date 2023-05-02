@@ -18,40 +18,24 @@ html
         main
             section 
                 article 
-                    h2 Créer une nouvelle pizza
-                    a(href="/pizzas") Retour à la liste des pizzas
-                    form(action="/editpizza" method='POST' id="formcreatepizza")
+                    h2 Créer un nouveau livreur
+                    a(href="/livreurs") Retour à la liste des livreurs
+                    form(action="/createdeliveryman" method='POST' id="formcreateDM")
                         table
                             tr 
                                 td
-                                    label(for="code") Code :
+                                    label(for="firstname") Prénom :
                                 td
-                                    input(type="text" name="code" id="code")
+                                    input(type="text" name="firstname" id="firstname")
                             tr 
                                 td 
-                                    label(for="label") Libellé :
+                                    label(for="lastname") Nom de famille :
                                 td
-                                    input(type="text" name="label" id="label")
-                            tr 
-                                td 
-                                    label(for="ing") Ingrédients :
-                                td
-                                    input(type="text" name="ing" id="ing")
-                            tr 
-                                td 
-                                    label(for="cat") Catégorie :
-                                td
-                                    input(type="text" name="cat" id="cat")
-                            tr 
-                                td
-                                    label(for="price") Prix :
-                                td
-                                    input(type="number" name="price" id="price")
-                                    input(name="version" id="version" value="1" type="hidden")
+                                    input(type="text" name="lastname" id="lastname")
                             tr 
                                 td 
                                 td
-                                    button(type="submit" name="create" id="buttoncreatepizza") Créer cette pizza !          
+                                    button(type="submit" name="create" id="buttoncreateDM") Ajouter ce livreur !          
             aside 
                 h3 Aside title
                 p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?

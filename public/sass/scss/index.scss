@@ -12,7 +12,7 @@ html {
   header {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
 
@@ -32,6 +32,7 @@ html {
       }
       ul {
         display: flex;
+        flex-wrap: wrap;
         flex-direction: row;
         background-color: azure;
         border-radius: 10px;
