@@ -2,14 +2,14 @@ doctype html
 html
     head
         title Administration de la pizzeria "Tomato"
-        link(rel="stylesheet", href="/public/sass/css/deliverymen.css")
+        link(rel="stylesheet", href="/public/sass/css/edit.css")
         link(rel="stylesheet", href="/public/sass/css/index.css")
         link(rel="preconnect" href="https://fonts.googleapis.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
     body 
         header 
             a(href="/admin-app/")
-                img(src="../public/images/logo_pizzeria.jpeg")
+                img(src="/public/images/logo_pizzeria.jpeg")
             div 
                 h1 Administration de la pizzeria "Pizza Master"
                 ul 
@@ -18,9 +18,9 @@ html
         main
             section 
                 article 
-                    h2 Modifier le livreur : "#{dm.firstname}" "#{dm.lastname}"
+                    h2 Modifier le livreur : #{dm.firstname} #{dm.lastname}
                     a(href="/livreurs") Retour à la liste des livreurs
-                    form(action="/editDM" method='POST' id="formeditDM")
+                    form(action="/editDM" method='POST' id="formedit")
                         div
                             input(type="hidden" name="code" id="code" value=`${dm.id}`)
                             label(for="firstname") Prénom :
@@ -29,7 +29,7 @@ html
                             label(for="lastname") Nom de famille : 
                             input(type="text" name="lastname" id="lastname" value=`${dm.lastname}`)
                         div    
-                            button(type="submit" name="edit" id="buttoneditDM") Modifier le livreur
+                            button(type="submit" name="edit" id="buttonedit") Modifier le livreur
             aside 
                 h3 Aside title
                 p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?

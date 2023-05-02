@@ -2,7 +2,7 @@ doctype html
 html
     head
         title Administration de la pizzeria "Tomato"
-        link(rel="stylesheet", href="/public/sass/css/createpizzas.css")
+        link(rel="stylesheet", href="/public/sass/css/admin.css")
         link(rel="stylesheet", href="/public/sass/css/index.css")
         link(rel="preconnect" href="https://fonts.googleapis.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
@@ -18,7 +18,34 @@ html
         main
             section 
                 article 
-                    h2 Clients          
+                    div
+                        h2 Liste des clients    
+                        a(href="/createcustomer" id="new") Ajouter un client
+                    table(id="table")
+                        tr
+                        th ID
+                        th Prénom 
+                        th Nom
+                        th Adresses
+                        th email 
+                        th Mot de passe
+                        th Action 
+                        each customer in customers 
+                            tr
+                                td #{customer.id}
+                                td #{customer.firstname}
+                                td #{customer.lastname}
+                                td #{customer.adresses}
+                                td #{customer.email}
+                                td(class="password-reset")
+                                    form(action=`customers/reset/${customer.id}` method='POST' id="formreset")
+                                        button(type="submit" class="reset") Réinitialiser
+                                td(class="actions")  
+                                    a(href=`customers/edit/${customer.id}`)
+                                        button(type="submit" class="modify") Editer
+                                    form(action=`customers/delete/${customer.id}` method='POST' id="formdelete")
+                                        button(type="submit" class="delete") Supprimer
+
             aside 
                 h3 Aside title
                 p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?

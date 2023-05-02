@@ -2,7 +2,7 @@ doctype html
 html
     head
         title Administration de la pizzeria "Tomato"
-        link(rel="stylesheet", href="/public/sass/css/deliverymen.css")
+        link(rel="stylesheet", href="/public/sass/css/admin.css")
         link(rel="stylesheet", href="/public/sass/css/index.css")
         link(rel="preconnect" href="https://fonts.googleapis.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
@@ -20,19 +20,19 @@ html
                 article 
                     div
                         h2 Livreurs disponibles
-                        a(href="/createdeliveryman" id="newDM") Ajouter un livreur
-                    table(id="table-livreurs")
+                        a(href="/createdeliveryman" id="new") Ajouter un livreur
+                    table(id="table")
                         tr
                         th ID
                         th Prénom
-                        th Nom de famille 
+                        th Nom 
                         th Actions 
                         each dman in dMen 
                             tr
                                 td #{dman.id}
                                 td #{dman.firstname}
                                 td #{dman.lastname}
-                                td(class="dm-actions")  
+                                td(class="actions")  
                                     a(href=`/livreurs/edit/${dman.id}`)
                                         button(type="submit" class="modify") Editer
                                     form(action=`/${dman.id}` method='POST' id="formdelete")

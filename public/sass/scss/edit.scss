@@ -1,0 +1,34 @@
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+
+  div {
+    text-align: right;
+    padding: 5px;
+    width: 500px;
+
+    label{
+        float: left;
+        margin-right: 5px;
+    }
+    input{
+        width: 300px;
+    }
+
+    button {
+      background-color: rgb(107, 183, 0);
+      color: rgb(253, 222, 211);
+      border-radius: 5px;
+      border: 1px solid rgb(253, 222, 211);
+      padding: 10px;
+      margin-right: 10px;
+      text-transform: uppercase;
+      align-self: flex-end;
+      &:hover {
+        background-color: rgb(205, 249, 143);
+        color: rgb(255, 68, 0);
+      }
+    }
+  }
+}

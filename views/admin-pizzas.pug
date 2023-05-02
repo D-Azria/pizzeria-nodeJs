@@ -2,7 +2,7 @@ doctype html
 html
     head
         title Administration de la pizzeria "Tomato"
-        link(rel="stylesheet", href="/public/sass/css/pizzas.css")
+        link(rel="stylesheet", href="/public/sass/css/admin.css")
         link(rel="stylesheet", href="/public/sass/css/index.css")
         link(rel="preconnect" href="https://fonts.googleapis.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
@@ -20,8 +20,8 @@ html
                 article 
                     div
                         h2 Pizzas à la carte
-                        a(href="/createpizza" id="newpizza") Créer une pizza
-                    table(id="table-pizzas")
+                        a(href="/createpizza" id="new") Créer une pizza
+                    table(id="table")
                         tr
                         th ID
                         th Code 
@@ -30,7 +30,7 @@ html
                         th Catégorie 
                         th Prix 
                         th Version 
-                        th Action 
+                        th Actions 
                         each pizza in pizzas 
                             tr
                                 td #{pizza.id}
@@ -40,7 +40,7 @@ html
                                 td #{pizza.category}
                                 td #{pizza.price}€
                                 td v#{pizza.version}
-                                td(class="pizz-actions")  
+                                td(class="actions")  
                                     a(href=`pizzas/edit/${pizza.id}`)
                                         button(type="submit" class="modify") Editer
                                     form(action=`pizzas/delete/${pizza.id}` method='POST' id="formdelete")

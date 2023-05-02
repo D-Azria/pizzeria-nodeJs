@@ -2,10 +2,6 @@ import mysql from "mysql2";
 import express from "express";
 const app = express();
 
-//////
-//////
-//////
-//////
 //////////     PARTIE CONNECTION
 //////
 //////
@@ -25,11 +21,11 @@ const pool = mysql.createPool({
 // La connexion à la base de données est établie
 const promisePool = pool.promise();
 
-//
-//
 ////// FONCTIONS POUR LES PIZZAS
-//
-//
+import { listPizzas } from "./admin/pizzas.js";
+import { newPizza } from "./admin/pizzas.js";
+import { editPizza } from "./admin/pizzas.js";
+/* 
 //fonction qui permet d'accéder aux données des pizzas
 async function listPizzas() {
   const [rows] = await promisePool.execute("select * from pizzas");
@@ -54,12 +50,13 @@ async function editPizza(code, label, ingredients, category, price, version) {
   );
   return rows;
 }
+ */
 
-//
-//
 ////// FONCTIONS POUR LES LIVREURS
-//
-//
+import { listDM } from "./admin/dm.js";
+import { newDM } from "./admin/dm.js";
+import { editDM } from "./admin/dm.js";
+/* 
 //fonction qui permet d'accéder aux données des livreurs
 async function listDM() {
     const [rows] = await promisePool.execute("select * from delivery_men");
@@ -82,12 +79,14 @@ async function editDM(firstname, lastname) {
   );
   return rows;
 }
+ */
+
+////// FONCTIONS POUR LES CLIENTS
+import { listCustomers } from "./admin/customers.js";
+import { newCustomer } from "./admin/customers.js";
+//import { editCustomer } from "./admin/customers.js";
 
 
-//////
-//////
-//////
-//////
 //////////     PARTIE WEB
 //////
 //////
@@ -114,12 +113,13 @@ app.get("/admin-app/", async (req, res) => {
   res.render("index-admin", {});
 });
 
-//
-//
 ////// PAGES ET ACTIONS POUR LES PIZZAS
 //
 //
+//
+//
 // Page de gestion des pizzas
+//
 app.get("/pizzas", async (req, res) => {
   const allPizzas = await listPizzas();
   res.render("admin-pizzas", {
@@ -128,6 +128,7 @@ app.get("/pizzas", async (req, res) => {
 });
 
 // Page de création d'une pizza
+//
 app.get("/createpizza", async (req, res) => {
   // permet de récupéréer tous les plats
   //    const allDishes = await listDishes();
@@ -137,6 +138,7 @@ app.get("/createpizza", async (req, res) => {
 });
 
 // Récupération de la requête de création d'une pizza
+//
 app.post("/createpizza", async (req, res) => {
   //recupération des informations de la nouvelle pizza envoyé par la méthode POST
   //const newPizzaId = req.body.id;
@@ -200,9 +202,9 @@ app.post("/editpizza", async (req, res) => {
   res.redirect("/pizzas");
 });
 
-//
-//
 ////// PAGES ET ACTIONS POUR LES LIVREURS
+//
+//
 //
 //
 // Page de gestion des livreurs
@@ -213,25 +215,21 @@ app.get("/livreurs", async (req, res) => {
     });
   });
   
-  // Page d'ajout d'un nouveur livreurs
+  // Page d'ajout d'un nouveur livreur
   app.get("/createdeliveryman", async (req, res) => {
-    // permet de récupéréer tous les plats
-    //    const allDishes = await listDishes();
     res.render("createdeliveryman", {
-      // permet d'utiliser les plats vers la pages PUG
     });
   });
 
 // Récupération de la requête d'ajout d'un livreur
 app.post("/createdeliveryman", async (req, res) => {
   //recupération des informations du nouveau livreur envoyé par la méthode POST
-  //const newPizzaId = req.body.id;
   const newDMfirstname = req.body.firstname;
   const newDMflastname = req.body.lastname;
   // Vérification en console
   console.log(req.body);
   console.log(newDMfirstname);
-  //Appel de la fonction de création de la nouvelle pizza
+  //Appel de la fonction de création du nouveau livreur
   const DMAdded = await newDM(
     newDMfirstname,
     newDMflastname
@@ -242,9 +240,9 @@ app.post("/createdeliveryman", async (req, res) => {
 });
 
 
-// Page édition d'une pizza
+// Page édition d'un livreur
 app.get("/livreurs/edit/:id", async (req, res) => {
-  // Sélection du plat à modifier grâce à son id présent dans l'HTML
+  // Sélection du livreur à modifier grâce à son id présent dans l'HTML
   const [[getDMToEdit]] = await promisePool.execute(
     `select * FROM delivery_men where id=?`,
     [req.params.id]
@@ -252,7 +250,7 @@ app.get("/livreurs/edit/:id", async (req, res) => {
   // Vérification en console
   console.log(getDMToEdit);
   res.render("editDM", {
-    // permet d'utiliser dans pug l'objet pizza sélectionné
+    // permet d'utiliser dans pug l'objet livreur sélectionné
     dm: getDMToEdit,
   });
 });
@@ -271,6 +269,57 @@ app.post("/editDM", async (req, res) => {
   res.redirect("/livreurs");
 });
 
+////// PAGES ET ACTIONS POUR LES CLIENTS
+//
+//
+//
+//
+// Page de gestion des clients
+app.get("/clients", async (req, res) => {
+  const allCustomers = await listCustomers();
+  res.render("admin-customers", {
+    customers: allCustomers,
+  });
+});
+
+// Page d'ajout d'un nouveau client
+app.get("/createcustomer", async (req, res) => {
+  res.render("createcustomer", {
+  });
+});
+
+// Récupération de la requête d'ajout d'un client
+app.post("/createcustomer", async (req, res) => {
+  console.log(req.body);
+//recupération des informations du nouveau client envoyé par la méthode POST
+const newCustomerFirstname = req.body.firstname;
+const newCustomerLastname = req.body.lastname;
+const newCustomerAdresse = req.body.adresse;
+const newCustomerEmail = req.body.email;
+const newCustomerPassword = req.body.password;
+// Vérification en console
+console.log(newCustomerFirstname);
+//Appel de la fonction de création du nouveau client
+const customerAdded = await newCustomer(newCustomerFirstname, newCustomerLastname, newCustomerAdresse, newCustomerEmail, newCustomerPassword);
+//création affichée en console
+console.log(`Nouveau client ajouté ${newCustomerFirstname}`);
+res.redirect("/clients");
+});
 
 
+
+// Page édition d'un client
+app.get("/customers/edit/:id", async (req, res) => {
+// Sélection du client à modifier grâce à son id présent dans l'HTML
+const [[getCustomerToEdit]] = await promisePool.execute(
+  `select * FROM customers where id=?`,
+  [req.params.id]
+);
+// Vérification en console
+console.log(getCustomerToEdit);
+res.render("editcustomer", {
+  // permet d'utiliser dans pug l'objet client sélectionné
+  customer: getCustomerToEdit,
+});
+});
 

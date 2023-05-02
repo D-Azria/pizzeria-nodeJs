@@ -1,0 +1,87 @@
+article {
+  display: flex;
+  flex-direction: column;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 0 5px 10px;
+
+    #new {
+      background-color: rgb(107, 183, 0);
+      color: rgb(253, 222, 211);
+      border-radius: 5px;
+      border: 1px solid rgb(253, 222, 211);
+      padding: 10px;
+      margin-right: 10px;
+      &:hover {
+        background-color: rgb(205, 249, 143);
+        color: rgb(255, 68, 0);
+      }
+    }
+  }
+  #table {
+    tr {
+      margin: 5px;
+      padding: 5px;
+      th {
+        text-align: left;
+      }
+      td {
+        flex-flow: flex nowrap;
+        max-width: fit-content;
+        margin: 5px 0;
+        padding: 5px 3px;
+        border-top: solid 1px black;
+        vertical-align: top;
+
+        &.password-reset {
+          width: 130px;
+          .reset{
+            background-color: rgb(249, 90, 90);
+            color: rgb(0, 0, 0);
+            padding: 3px 6px;
+            margin: 0 3px;
+            border-radius: 5px;
+            
+            &:hover {
+              background-color: rgb(232, 0, 81);
+              color: rgb(255, 255, 255);
+            }
+          }
+        }
+
+        &.actions {
+          width: 150px;
+          .modify {
+            background-color: rgb(249, 231, 90);
+            color: black;
+            padding: 3px 6px;
+            margin: 0 3px;
+            border-radius: 5px;
+            float: left;
+
+            &:hover {
+              background-color: rgb(243, 239, 30);
+              color: rgb(149, 31, 47);
+            }
+          }
+          .delete {
+            background-color: red;
+            color: white;
+            padding: 3px 6px;
+            margin: 0 3px;
+            border-radius: 5px;
+
+            &:hover {
+              background-color: rgb(255, 120, 120);
+              color: rgb(0, 0, 0);
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,57 @@
+doctype html 
+html
+    head
+        title Administration de la pizzeria "Tomato"
+        link(rel="stylesheet", href="/public/sass/css/create.css")
+        link(rel="stylesheet", href="/public/sass/css/index.css")
+        link(rel="preconnect" href="https://fonts.googleapis.com")
+        link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
+    body 
+        header 
+            a(href="/admin-app/")
+                img(src="../public/images/logo_pizzeria.jpeg")
+            div 
+                h1 Administration de la pizzeria "Pizza Master"
+                ul 
+                    include header-menu.pug 
+                                    
+        main
+            section 
+                article 
+                    h2 Créer un nouveau client
+                    a(href="/clients") Retour à la liste des clients
+                    form(action="/createcustomer" method='POST' id="formcreate")
+                        table
+                            tr 
+                                td
+                                    label(for="firstname") Prénom :
+                                td
+                                    input(type="text" name="firstname" id="firstname")
+                            tr 
+                                td 
+                                    label(for="lastname") Nom :
+                                td
+                                    input(type="text" name="lastname" id="lastname")
+                            tr 
+                                td 
+                                    label(for="adresses") Adresse :
+                                td
+                                    input(type="text" name="adresses" id="adresses")
+                            tr 
+                                td 
+                                    label(for="email") email :
+                                td
+                                    input(type="text" name="email" id="email")
+                            tr 
+                                td
+                                    label(for="password") Mot de passe :
+                                td
+                                    input(type="text" name="password" id="password")
+                            tr 
+                                td 
+                                td
+                                    button(type="submit" name="create" id="buttoncreate") Ajouter ce client !          
+            aside 
+                h3 Aside title
+                p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?
+        footer
