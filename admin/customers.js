@@ -24,11 +24,11 @@ const promisePool = pool.promise();
 //
 //fonction qui permet d'accéder aux données des clients
 export async function listCustomers() {
-  // Permet de joindre 2 tableaux
+  // Permet de joindre les 2 tableaux : clients et leurs adresses
   const [rows] = await promisePool.execute(
     "SELECT customers.cus_id, customers.firstname, customers.lastname, customers.email, customer_adresses.adresse FROM customers INNER JOIN customer_adresses ON customers.cus_id = customer_adresses.cus_id"
   );
-  //    console.log(rows);
+
   // merge des tableaux pour afficher une seule ligne par client
   const mergedCustomers = rows.reduce((accumulator, currentValue) => {
     // Recherche d'un client existant par son id : cus_id
@@ -36,7 +36,7 @@ export async function listCustomers() {
       (c) => c.cus_id === currentValue.cus_id
     );
     if (existingCustomer) {
-      // S'il existe, push de la nouvelle adresse rencontrée dans l'objet qui appartient à ce client
+      // Si ce client existe déjà, push de la nouvelle adresse rencontrée dans l'objet qui appartient à ce client
       existingCustomer.adresse.push(currentValue.adresse);
     } else {
       // Sinon, push des données rencontrées dans le nouveau tableau accumulator
@@ -55,6 +55,8 @@ export async function listCustomers() {
   //  console.log(mergedCustomers);
   return mergedCustomers;
 }
+
+
 /* 
 export async function listCustomers() {
   const [rows] = await promisePool.execute("select * from customers"); 
@@ -112,8 +114,8 @@ export async function editCustomer(
   const salt = bcrypt.genSaltSync(saltRounds);
   const password = bcrypt.hashSync(pwToHash, salt);
   const [rowCustomer] = await promisePool.execute(
-    "insert into customers(firstname, lastname, email, password) values(?,?,?,?)",
-    [firstname, lastname, email, password]
+    "UPDATE customers SET firstname=?, lastname=?, email=?, password=? WHERE cus_id=?",
+    [firstname, lastname, email, password, cus_id]
   );
 
   /*
@@ -126,15 +128,21 @@ export async function editCustomer(
   console.log(id);
    */
   console.log(adresses);
-  const rowCustomerAdresse = [adresses];
-  console.log(`AAA`, rowCustomerAdresse);
-  const [rows] = await promisePool.execute(
-    rowCustomerAdresse.forEach((adresse) => {
+  const rowCustomerAdresse = adresses;
+  console.log(`New Customer Adresses`, rowCustomerAdresse);
+  // Enlever les anciennes données
+  await deleteCustomerAdresses(cus_id);
+// Ajouter les nouvellles adresses
+  for (const adresse of rowCustomerAdresse) {
+    await promisePool.execute(
       "insert into customer_adresses(cus_id, adresse) values(?, ?)",
-        [cus_id, adresse];
-    })
-  );
-  return rowCustomer, rows;
+      [cus_id, adresse]
+    );
+  }
+
+  /*   const [rows] = rowCustomerAdresse.forEach(async (adresse) => {
+    }) */
+  //  return rowCustomer, rows;
 }
 
 export async function addAdress(cus_id, adresses) {
@@ -153,5 +161,21 @@ export async function resetCustomerPassword(pwToHash, cus_id) {
     [password, cus_id]
   );
   console.log("password updated");
+  return rows;
+}
+
+export async function deleteCustomer(cus_id) {
+  const [rows] = await promisePool.execute(
+    "DELETE FROM customers WHERE cus_id=?",
+    [cus_id]
+  );
+  return rows;
+}
+
+export async function deleteCustomerAdresses(cus_id) {
+  const [rows] = await promisePool.execute(
+    "DELETE FROM customer_adresses WHERE cus_id=?",
+    [cus_id]
+  );
   return rows;
 }

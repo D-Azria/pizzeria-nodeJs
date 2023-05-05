@@ -6,6 +6,7 @@ html
         link(rel="stylesheet", href="/public/sass/css/index.css")
         link(rel="preconnect" href="https://fonts.googleapis.com")
         link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
+        script(src="/public/scripts/selectAdressOrder.js" defer)
     body 
         header 
             a(href="/admin-app/")
@@ -19,7 +20,7 @@ html
             section 
                 article 
                     h2 Créer une nouvelle commande
-                    a(href="/orders") Retour à la liste des commandes
+                    a(href="/commandes") Retour à la liste des commandes
                     form(action="/createorder" method='POST' id="formcreateorder")
                         table
                             tr 
@@ -33,7 +34,7 @@ html
                                 td 
                                     label(for="cus_id") Client :
                                 td
-                                    select(onchange="" type="text" name="cus_id" id="cus_id")
+                                    select(type="text" name="cus_id" id="cus_id")
                                         each customer in customers
                                             option(value=`${customer.cus_id}`) #{customer.firstname} #{customer.lastname}
                             tr 
@@ -59,8 +60,8 @@ html
                                     label(for="adresses") Adresse :
                                 td
                                     select(type="text" name="adresses" id="adresses")
-                                        each customer in customers
-                                            option(value=`${customer.adresses}`) #{customer.adresses}                            
+                                        each adresse in adresses
+                                            option(id=`${adresse.cus_id}` value=`${adresse.adresse}`) #{adresse.adresse}                            
                             tr 
                                 td
                                     label(for="price") Prix total :

@@ -1,30 +1,14 @@
+////////// IMPORT DES MODULES
 import mysql from "mysql2";
 import express from "express";
 const app = express();
 
-//////////     PARTIE CONNECTION
-//////
-//////
-//////
-//////
-//création d'un pool de connection : gère les connection avec la BD
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  database: "pizzeria",
-  waitForConnections: true,
-  connectionLimit: 10,
-  // port par défaut utilisé : non nécessaire de le préciser
-});
-
-// La connexion à la base de données est établie
-const promisePool = pool.promise();
-
+//////////IMPORT DES FONCTIONS
 ////// FONCTIONS POUR LES PIZZAS
 import { listPizzas } from "./admin/pizzas.js";
 import { newPizza } from "./admin/pizzas.js";
 import { editPizza } from "./admin/pizzas.js";
+import { deletePizza } from "./admin/pizzas.js";
 /* 
 //fonction qui permet d'accéder aux données des pizzas
 async function listPizzas() {
@@ -56,6 +40,7 @@ async function editPizza(code, label, ingredients, category, price, version) {
 import { listDM } from "./admin/dm.js";
 import { newDM } from "./admin/dm.js";
 import { editDM } from "./admin/dm.js";
+import { deleteDm } from "./admin/dm.js";
 /* 
 //fonction qui permet d'accéder aux données des livreurs
 async function listDM() {
@@ -83,14 +68,38 @@ async function editDM(firstname, lastname) {
 
 ////// FONCTIONS POUR LES CLIENTS
 import { listCustomers } from "./admin/customers.js";
+import { listCustomerAdresses} from "./admin/customers.js";
 import { newCustomer } from "./admin/customers.js";
 import { editCustomer } from "./admin/customers.js";
 import { addAdress } from "./admin/customers.js";
 import { resetCustomerPassword } from "./admin/customers.js";
+import { deleteCustomer } from "./admin/customers.js";
+import { deleteCustomerAdresses } from "./admin/customers.js";
 
 ////// FONCTIONS POUR LES COMMANDES
 import { listOrders } from "./admin/orders.js";
 import { newOrder } from "./admin/orders.js";
+
+
+//////////     PARTIE CONNECTION
+//////
+//////
+//////
+//////
+//création d'un pool de connection : gère les connection avec la BD
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "pizzeria",
+  waitForConnections: true,
+  connectionLimit: 10,
+  // port par défaut utilisé : non nécessaire de le préciser
+});
+
+// La connexion à la base de données est établie
+const promisePool = pool.promise();
+
 
 //////////     PARTIE WEB
 //////
@@ -106,12 +115,11 @@ app.listen(port, () => {
 //configuration du moteur de vue PUG
 app.set("views", "./views");
 app.set("view engine", "pug");
-// le dossier web devient visible
+// le dossier public devient visible
 app.use("/public", express.static("public"));
 // permet de traiter les données d'url
 app.use(express.urlencoded({ extended: true }));
 
-//
 ////// Page d'accueil de l'administration de la pizzeria
 //
 app.get("/admin-app/", async (req, res) => {
@@ -137,8 +145,7 @@ app.get("/pizzas", async (req, res) => {
 // Page de création d'une pizza
 //
 app.get("/createpizza", async (req, res) => {
-  res.render("createpizza", {
-  });
+  res.render("createpizza", {});
 });
 
 // Récupération de la requête de création d'une pizza
@@ -186,6 +193,7 @@ app.get("/pizzas/edit/:pizz_id", async (req, res) => {
 
 // Méthode de récupération du message d'édition
 app.post("/editpizza", async (req, res) => {
+  const pizzaId = req.body.pizz_id;
   const pizzaCode = req.body.code;
   const pizzaLabel = req.body.label;
   const pizzaIng = req.body.ing;
@@ -201,8 +209,19 @@ app.post("/editpizza", async (req, res) => {
     pizzaPrice,
     pizzaVersion
   );
+  const oldPizzaDeleted = await deletePizza(
+    pizzaId
+  )
   //Modification affichée en console
   console.log(`Pizza ${pizzaLabel} modifiée`);
+  res.redirect("/pizzas");
+});
+
+// Méthode pour supprimer les pizzas
+app.post("/pizzas/delete/:id", async (req, res) => {
+  const pizz_id = req.params.id;
+  console.log(pizz_id);
+  const pizzaDeleted = await deletePizza(pizz_id);
   res.redirect("/pizzas");
 });
 
@@ -254,7 +273,7 @@ app.get("/livreurs/edit/:dm_id", async (req, res) => {
   });
 });
 
-// Méthode de récupération du message d'édition
+// Méthode de récupération du message de modification d'un livreur
 app.post("/editDM", async (req, res) => {
   const DMfirstname = req.body.firstname;
   const DMflastname = req.body.lastname;
@@ -262,6 +281,14 @@ app.post("/editDM", async (req, res) => {
   const dmEdited = await editDM(DMfirstname, DMflastname);
   //Modification affichée en console
   console.log(`Livreur modifié ${DMfirstname}`);
+  res.redirect("/livreurs");
+});
+
+// Méthode pour supprimer les livreurs
+app.post("/livreurs/delete/:id", async (req, res) => {
+  const dm_id = req.params.id;
+  console.log(dm_id);
+  const dmDeleted = await deleteDm(dm_id);
   res.redirect("/livreurs");
 });
 
@@ -273,12 +300,12 @@ app.post("/editDM", async (req, res) => {
 // Page de gestion des clients
 app.get("/clients", async (req, res) => {
   const allCustomers = await listCustomers();
-//  const allAdresses = await listCustomerAdresses();
-//  console.log(await listCustomers());
-//  console.log(await listCustomerAdresses());
+  //  const allAdresses = await listCustomerAdresses();
+  //  console.log(await listCustomers());
+  //  console.log(await listCustomerAdresses());
   res.render("admin-customers", {
     customers: allCustomers,
-//    cust_adresses: allAdresses,
+    //    cust_adresses: allAdresses,
   });
   //
 });
@@ -314,7 +341,7 @@ app.post("/createcustomer", async (req, res) => {
 
 // Page édition d'un client
 app.get("/customers/edit/:cus_id", async (req, res) => {
-  // Sélection du client à modifier grâce à son id présent dans l'HTML
+  // Sélection du client à modifier grâce à son id présent dans la requête HTML
   const [[getCustomerToEdit]] = await promisePool.execute(
     `select * FROM customers where cus_id=?`,
     [req.params.cus_id]
@@ -330,7 +357,7 @@ app.get("/customers/edit/:cus_id", async (req, res) => {
   res.render("editcustomer", {
     // permet d'utiliser dans pug l'objet client sélectionné
     customer: getCustomerToEdit,
-    adresses: getCustomerAdressesToEdit
+    adresses: getCustomerAdressesToEdit,
   });
 });
 
@@ -352,36 +379,42 @@ app.post("/editcustomer", async (req, res) => {
     newcustomerLastname,
     newcustomerAdresses,
     newcustomerEmail,
-    newcustomerPassword);
+    newcustomerPassword,
+  );
   //Modification affichée en console
   console.log(`Clients modifié ${newcustomerFirstname}`);
   res.redirect("/clients");
 });
 
-// Méthode de récupération du message d'édition
+// Méthode de récupération du message d'ajout d'une adresse
 app.post("/addAdress", async (req, res) => {
   console.log(req.body);
   const customerId = req.body.cus_id;
   const customerNewAdresse = req.body.newadresse;
   // Vérification en console
   //Appel de la fonction de modification du client
-  const customerAdded = await addAdress(
-    customerId,
-    customerNewAdresse,);
+  const customerAdded = await addAdress(customerId, customerNewAdresse);
   //Modification affichée en console
   console.log(`Adresse ajoutée ${customerNewAdresse}`);
   res.redirect("/clients");
 });
 
-
-
-
 // Méthode de réinitialisation du mot de passe
-app.post("/customers/reset", async (req, res) =>{
+app.post("/customers/reset", async (req, res) => {
   const customerPwId = req.body.cus_id;
   const customerPwPw = req.body.password;
   console.log(req.body);
   const resetPassword = await resetCustomerPassword(customerPwPw, customerPwId);
+  res.redirect("/clients");
+});
+
+
+// Méthode pour supprimer les clients et leurs adresses
+app.post("/clients/delete/:id", async (req, res) => {
+  const cus_id = req.params.id;
+  console.log(cus_id);
+  const customerDeleted = await deleteCustomer(cus_id);
+  const customerAdressesDeleted = await deleteCustomerAdresses(cus_id);
   res.redirect("/clients");
 });
 
@@ -404,11 +437,18 @@ app.get("/createorder", async (req, res) => {
   const allPizzas = await listPizzas();
   const allDM = await listDM();
   const allCustomers = await listCustomers();
+  const allAdresses = await listCustomerAdresses();
+for (const adresse of allAdresses){
+  console.log(`Adresse client ${adresse.cus_id} :`, adresse.adresse);
+}
+  console.log(allAdresses);
+
   res.render("createorder", {
     // permet d'utiliser les informations vers la pages PUG
     pizzas: allPizzas,
     dMen: allDM,
     customers: allCustomers,
+    adresses: allAdresses,
   });
 });
 

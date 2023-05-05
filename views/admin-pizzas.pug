@@ -43,7 +43,7 @@ html
                                 td(class="actions")  
                                     a(href=`pizzas/edit/${pizza.pizz_id}`)
                                         button(type="submit" class="modify") Editer
-                                    form(action=`pizzas/delete/${pizza.pizz_id}` method='POST' id="formdelete")
+                                    form(action=`/pizzas/delete/${pizza.pizz_id}` method='POST' id="formdelete")
                                         button(type="submit" class="delete") Supprimer
 
             aside 

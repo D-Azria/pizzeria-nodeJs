@@ -22,23 +22,31 @@ const promisePool = pool.promise();
 //
 //fonction qui permet d'accéder aux données des livreurs
 export async function listDM() {
-    const [rows] = await promisePool.execute("select * from delivery_men");
-    // console.log(rows);
-    return rows;
-  }
+  const [rows] = await promisePool.execute("select * from delivery_men");
+  // console.log(rows);
+  return rows;
+}
 // fonction qui permet de créer un nouveau serveur dans la BD pizzeria, table delivery_men
 export async function newDM(firstname, lastname) {
-    const [rows] = await promisePool.execute(
-      "insert into delivery_men(firstname, lastname) values(?,?)",
-      [firstname, lastname]
-    );
-    return rows;
-  }
+  const [rows] = await promisePool.execute(
+    "insert into delivery_men(firstname, lastname) values(?,?)",
+    [firstname, lastname]
+  );
+  return rows;
+}
 // permet d'éditer les livreurs en fonction de l'id qui reste fixe
 export async function editDM(firstname, lastname) {
   const [rows] = await promisePool.execute(
     "insert into delivery_men(firstname, lastname) values(?,?)",
     [firstname, lastname]
+  );
+  return rows;
+}
+
+export async function deleteDm(dm_id) {
+  const [rows] = await promisePool.execute(
+    "DELETE FROM delivery_men WHERE dm_id=?",
+    [dm_id]
   );
   return rows;
 }

@@ -26,19 +26,41 @@ export async function listPizzas() {
 }
 
 // fonction qui permet de créer une nouvelle pizza dans la BD pizzeria table pizzas
-export async function newPizza(code, label, ingredients, category, price, version) {
-    const [rows] = await promisePool.execute(
-      "insert into pizzas(code, label, ingredients, category, price, version) values(?,?,?,?,?,?)",
-      [code, label, ingredients, category, price, version]
-    );
-    return rows;
-  }
-  
-   // permet d'éditer les pizzas en fonction de l'id qui reste fixe
-   export async function editPizza(code, label, ingredients, category, price, version) {
-    const [rows] = await promisePool.execute(
-      "insert into pizzas(code, label, ingredients, category, price, version) values(?,?,?,?,?,?)",
-      [code, label, ingredients, category, price, version]
-    );
-    return rows;
-  }
+export async function newPizza(
+  code,
+  label,
+  ingredients,
+  category,
+  price,
+  version
+) {
+  const [rows] = await promisePool.execute(
+    "insert into pizzas(code, label, ingredients, category, price, version) values(?,?,?,?,?,?)",
+    [code, label, ingredients, category, price, version]
+  );
+  return rows;
+}
+
+// permet d'éditer les pizzas en fonction de l'id qui reste fixe
+export async function editPizza(
+  code,
+  label,
+  ingredients,
+  category,
+  price,
+  version
+) {
+  const [rows] = await promisePool.execute(
+    "insert into pizzas(code, label, ingredients, category, price, version) values(?,?,?,?,?,?)",
+    [code, label, ingredients, category, price, version]
+  );
+  return rows;
+}
+
+export async function deletePizza(
+  pizz_id
+) {
+  const [rows] = await promisePool.execute(
+    "delete from pizzas where pizz_id=?", [pizz_id]
+  )
+}

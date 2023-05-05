@@ -35,7 +35,7 @@ html
                                 td(class="actions")  
                                     a(href=`/livreurs/edit/${dman.dm_id}`)
                                         button(type="submit" class="modify") Editer
-                                    form(action=`/${dman.dm_id}` method='POST' id="formdelete")
+                                    form(action=`/livreurs/delete/${dman.dm_id}` method='POST' id="formdelete")
                                         button(type="submit" class="delete") Supprimer
 
             aside 
