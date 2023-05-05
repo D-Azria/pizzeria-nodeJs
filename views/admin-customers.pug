@@ -23,28 +23,33 @@ html
                         a(href="/createcustomer" id="new") Ajouter un client
                     table(id="table")
                         tr
-                        th ID
-                        th Prénom 
-                        th Nom
-                        th Adresses
-                        th email 
-                        th Mot de passe
-                        th Action 
-                        each customer in customers 
-                            tr
-                                td #{customer.id}
-                                td #{customer.firstname}
-                                td #{customer.lastname}
-                                td #{customer.adresses}
-                                td #{customer.email}
-                                td(class="password-reset")
-                                    form(action=`customers/reset/${customer.id}` method='POST' id="formreset")
-                                        button(type="submit" class="reset") Réinitialiser
-                                td(class="actions")  
-                                    a(href=`customers/edit/${customer.id}`)
-                                        button(type="submit" class="modify") Editer
-                                    form(action=`customers/delete/${customer.id}` method='POST' id="formdelete")
-                                        button(type="submit" class="delete") Supprimer
+                            th ID
+                            th Prénom 
+                            th Nom
+                            th Adresses
+                            th email 
+                            th Mot de passe
+                            th Action 
+                            each customer in customers 
+                                tr
+                                    td #{customer.cus_id}
+                                    td #{customer.firstname}
+                                    td #{customer.lastname}
+                                    td(id=`${customer.cus_id}`) 
+                                        each adresse in customer.adresse
+                                            div= adresse
+                                    td #{customer.email}
+                                    td(class="password-reset")
+                                        form(action=`customers/reset` method='POST' id="formreset")
+                                            
+                                            input(type="hidden" name="password" id="password" value="1234")
+                                            input(type="hidden" name="cus_id" id="cus_id" value=`${customer.cus_id}`)
+                                            button(type="submit" class="reset") Réinitialiser
+                                    td(class="actions")  
+                                        a(href=`customers/edit/${customer.cus_id}`)
+                                            button(type="submit" class="modify") Editer
+                                        form(action=`customers/delete/${customer.cus_id}` method='POST' id="formdelete")
+                                            button(type="submit" class="delete") Supprimer
 
             aside 
                 h3 Aside title

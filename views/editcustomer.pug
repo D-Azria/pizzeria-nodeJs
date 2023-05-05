@@ -18,28 +18,42 @@ html
         main
             section 
                 article 
-                    h2 Modifier le client : #{customer.firstname} #{customer.lastname}
+                    h2 Client : #{customer.firstname} #{customer.lastname}
                     a(href="/clients") Retour à la liste des clients
-                    form(action="/editcustomer" method='POST' id="formedit")
-                        div
-                            input(type="hidden" name="code" id="code" value=`${customer.id}`)
-                            label(for="ing") Prénom :
-                            input(type="text" name="ing" id="ing" value=`${customer.firstname}`)
-                        div
-                            label(for="cat") Nom : 
-                            input(type="text" name="cat" id="cat" value=`${customer.lastname}`)
-                        div
-                            label(for="price") Adresse : 
-                            input(type="text" name="price" id="price" value=`${customer.adresses}`)
-                        div
-                            label(for="price") email : 
-                            input(type="text" name="price" id="price" value=`${customer.email}`)
-                        div
-                            label(for="price") password : 
-                            input(type="text" name="price" id="price" value=`${customer.password}`)
+                    div(id="editcustomers")
+                        form(action="/editcustomer" method='POST' id="formedit")
+                            div
+                                h3 Modifier les informations client :
+                            div
+                                input(type="hidden" name="cus_id" id="cus_id" value=`${customer.cus_id}` required)
+                                label(for="firstname") Prénom :
+                                input(type="text" name="firstname" id="firstname" value=`${customer.firstname}` required)
+                            div
+                                label(for="lastname") Nom : 
+                                input(type="text" name="lastname" id="lastname" value=`${customer.lastname}` required)
 
-                        div    
-                            button(type="submit" name="edit" id="buttonedit") Modifier le client
+                            each adresse in adresses
+                                div
+                                    label(for="adresses") Adresse : 
+                                    input(type="text" name="adresses" id=`${addresse_id}` value=`${adresse.adresse}` required)
+                            div
+                                label(for="email") email : 
+                                input(type="text" name="email" id="email" value=`${customer.email}` required)
+                            div
+                                label(for="password") Nouveau mot de passe : 
+                                input(type="text" name="password" id="password" required)
+
+                            div    
+                                button(type="submit" name="edit" id="buttonedit") Modifier le client 
+                        form(action="/addAdress" method='POST' id="addAdress")
+                            div 
+                                h3 Ajouter une adresse au client :
+                            div
+                                input(type="hidden" name="cus_id" id="cus_id" value=`${customer.cus_id}` required)
+                                label(for="newadresse") Adresse : 
+                                input(type="text" name="newadresse" id="newadresse" required)
+                            div    
+                                button(type="submit" name="edit" id="buttonedit") Ajouter une adresse ! 
             aside 
                 h3 Aside title
                 p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?

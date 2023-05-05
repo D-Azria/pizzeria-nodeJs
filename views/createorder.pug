@@ -1,0 +1,76 @@
+doctype html 
+html
+    head
+        title Administration de la pizzeria "Tomato"
+        link(rel="stylesheet", href="/public/sass/css/create.css")
+        link(rel="stylesheet", href="/public/sass/css/index.css")
+        link(rel="preconnect" href="https://fonts.googleapis.com")
+        link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
+    body 
+        header 
+            a(href="/admin-app/")
+                img(src="../public/images/logo_pizzeria.jpeg")
+            div 
+                h1 Administration de la pizzeria "Pizza Master"
+                ul 
+                    include header-menu.pug 
+                                    
+        main
+            section 
+                article 
+                    h2 Créer une nouvelle commande
+                    a(href="/orders") Retour à la liste des commandes
+                    form(action="/createorder" method='POST' id="formcreateorder")
+                        table
+                            tr 
+                                td 
+                                    label(for="dm_id") Livreurs : 
+                                td
+                                    select(type="text" name="dm_id" id="dm_id")
+                                        each dman in dMen  
+                                            option(value=`${dman.dm_id}`) #{dman.firstname} #{dman.lastname}
+                            tr 
+                                td 
+                                    label(for="cus_id") Client :
+                                td
+                                    select(onchange="" type="text" name="cus_id" id="cus_id")
+                                        each customer in customers
+                                            option(value=`${customer.cus_id}`) #{customer.firstname} #{customer.lastname}
+                            tr 
+                                td 
+                                    label(for="pizz_id") Pizzas :
+                                td
+                                    select(type="text" name="pizz_id" id="pizz_id")
+                                        each pizza in pizzas
+                                            option(value=`${pizza.pizz_id}`) #{pizza.label} (#{pizza.price} €)
+                                    
+                                    label(for="pizz_qt") Quantité :
+                                    input(type="number" name="pizz_qt" id="pizz_qt" value="1")
+                            tr 
+                                td 
+                                    label(for="status") Statut :
+                                td
+                                    select(type="text" name="status" id="status")
+                                        option ENREGISTRE
+                                        option EN_COURS_DE_LIVRAISON
+                                        option LIVRE
+                            tr 
+                                td 
+                                    label(for="adresses") Adresse :
+                                td
+                                    select(type="text" name="adresses" id="adresses")
+                                        each customer in customers
+                                            option(value=`${customer.adresses}`) #{customer.adresses}                            
+                            tr 
+                                td
+                                    label(for="price") Prix total :
+                                td
+                                    p
+                            tr 
+                                td 
+                                td
+                                    button(type="submit" name="create" id="buttoncreateorder") Passer commande !          
+            aside 
+                h3 Aside title
+                p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?
+        footer

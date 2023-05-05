@@ -1,0 +1,57 @@
+doctype html 
+html
+    head
+        title Administration de la pizzeria "Tomato"
+        link(rel="stylesheet", href="/public/sass/css/admin.css")
+        link(rel="stylesheet", href="/public/sass/css/index.css")
+        link(rel="preconnect" href="https://fonts.googleapis.com")
+        link(href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet")
+    body 
+        header 
+            a(href="/admin-app/")
+                img(src="../public/images/logo_pizzeria.jpeg")
+            div 
+                h1 Administration de la pizzeria "Pizza Master"
+                ul 
+                    include header-menu.pug 
+                                    
+        main
+            section 
+                article 
+                    div
+                        h2 Commandes en cours
+                        a(href="/createorder" id="new") Nouvelle commande
+                    table(id="table")
+                        tr
+                            th(rowspan="2") ID
+                            th(rowspan="2") Livreur 
+                            th(rowspan="2") Client  
+                            th(rowspan="2") Statut
+                            th(rowspan="2") Adresse 
+                            th(colspan="3") Pizzas 
+                            th(rowspan="2") Prix 
+                            th(rowspan="2") Actions 
+                        tr 
+                            th Code 
+                            th Quantité
+                            th Prix Unitaire
+                            each order in orders 
+                                tr
+                                    td #{order.ord_id}
+                                    td #{order.dm_id}
+                                    td #{order.cus_id}
+                                    td #{order.status}
+                                    td #{order.pizz_id}
+                                    td #{order.pizz_qt}€
+                                    td #{order.pizza.price}
+                                    td #{order.Price}
+                                    td(class="actions")  
+                                        a(href=`orders/edit/${order.id}`)
+                                            button(type="submit" class="modify") Editer
+                                        form(action=`orders/delete/${order.id}` method='POST' id="formdelete")
+                                            button(type="submit" class="delete") Supprimer
+
+            aside 
+                h3 Aside title
+                p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?
+        footer

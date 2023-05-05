@@ -1,21 +1,31 @@
-form {
+#editcustomers {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+#editcustomers form {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  border-left: solid black 1px;
+  padding-left: 5px;
 }
-form div {
+#editcustomers form div {
   text-align: right;
   padding: 5px;
-  width: 500px;
+  width: 400px;
 }
-form div label {
+#editcustomers form div h3 {
+  text-align: left;
+}
+#editcustomers form div label {
   float: left;
   margin-right: 5px;
 }
-form div input {
+#editcustomers form div input {
   width: 300px;
 }
-form div button {
+#editcustomers form div button {
   background-color: rgb(107, 183, 0);
   color: rgb(253, 222, 211);
   border-radius: 5px;
@@ -25,7 +35,7 @@ form div button {
   text-transform: uppercase;
   align-self: flex-end;
 }
-form div button:hover {
+#editcustomers form div button:hover {
   background-color: rgb(205, 249, 143);
   color: rgb(255, 68, 0);
 }

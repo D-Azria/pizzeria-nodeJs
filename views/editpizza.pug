@@ -32,7 +32,7 @@ html
                         div
                             label(for="price") Prix 
                             input(type="number" name="price" id="price" value=`${pizza.price}`)
-                            input(name="version" id="version" value=`${pizza.version}` type="hidden")
+                            input(name="version" id="version" value=`${pizza.version + 1}` type="hidden")
                         div    
                             button(type="submit" name="edit" id="buttonedit") Modifier la pizza
             aside 

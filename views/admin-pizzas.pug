@@ -33,7 +33,7 @@ html
                         th Actions 
                         each pizza in pizzas 
                             tr
-                                td #{pizza.id}
+                                td #{pizza.pizz_id}
                                 td #{pizza.code}
                                 td #{pizza.label}
                                 td #{pizza.ingredients}
@@ -41,9 +41,9 @@ html
                                 td #{pizza.price}€
                                 td v#{pizza.version}
                                 td(class="actions")  
-                                    a(href=`pizzas/edit/${pizza.id}`)
+                                    a(href=`pizzas/edit/${pizza.pizz_id}`)
                                         button(type="submit" class="modify") Editer
-                                    form(action=`pizzas/delete/${pizza.id}` method='POST' id="formdelete")
+                                    form(action=`pizzas/delete/${pizza.pizz_id}` method='POST' id="formdelete")
                                         button(type="submit" class="delete") Supprimer
 
             aside 

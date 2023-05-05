@@ -84,8 +84,13 @@ async function editDM(firstname, lastname) {
 ////// FONCTIONS POUR LES CLIENTS
 import { listCustomers } from "./admin/customers.js";
 import { newCustomer } from "./admin/customers.js";
-//import { editCustomer } from "./admin/customers.js";
+import { editCustomer } from "./admin/customers.js";
+import { addAdress } from "./admin/customers.js";
+import { resetCustomerPassword } from "./admin/customers.js";
 
+////// FONCTIONS POUR LES COMMANDES
+import { listOrders } from "./admin/orders.js";
+import { newOrder } from "./admin/orders.js";
 
 //////////     PARTIE WEB
 //////
@@ -121,8 +126,10 @@ app.get("/admin-app/", async (req, res) => {
 // Page de gestion des pizzas
 //
 app.get("/pizzas", async (req, res) => {
+  // permet de récupéréer toutes les pizzas
   const allPizzas = await listPizzas();
   res.render("admin-pizzas", {
+    // permet d'utiliser les plats vers la pages PUG
     pizzas: allPizzas,
   });
 });
@@ -130,10 +137,7 @@ app.get("/pizzas", async (req, res) => {
 // Page de création d'une pizza
 //
 app.get("/createpizza", async (req, res) => {
-  // permet de récupéréer tous les plats
-  //    const allDishes = await listDishes();
   res.render("createpizza", {
-    // permet d'utiliser les plats vers la pages PUG
   });
 });
 
@@ -166,11 +170,11 @@ app.post("/createpizza", async (req, res) => {
 });
 
 // Page édition d'une pizza
-app.get("/pizzas/edit/:id", async (req, res) => {
+app.get("/pizzas/edit/:pizz_id", async (req, res) => {
   // Sélection du plat à modifier grâce à son id présent dans l'HTML
   const [[getPizzaToEdit]] = await promisePool.execute(
-    `select * FROM pizzas where id=?`,
-    [req.params.id]
+    `select * FROM pizzas where pizz_id=?`,
+    [req.params.pizz_id]
   );
   // Vérification en console
   console.log(getPizzaToEdit);
@@ -187,7 +191,7 @@ app.post("/editpizza", async (req, res) => {
   const pizzaIng = req.body.ing;
   const pizzaCat = req.body.cat;
   const pizzaPrice = req.body.price;
-  const pizzaVersion = req.body.version + 1;
+  const pizzaVersion = req.body.version;
   console.log(req.body);
   const pizzaEdited = await editPizza(
     pizzaCode,
@@ -209,17 +213,16 @@ app.post("/editpizza", async (req, res) => {
 //
 // Page de gestion des livreurs
 app.get("/livreurs", async (req, res) => {
-    const allDM = await listDM();
-    res.render("admin-deliverymen", {
-      dMen: allDM,
-    });
+  const allDM = await listDM();
+  res.render("admin-deliverymen", {
+    dMen: allDM,
   });
-  
-  // Page d'ajout d'un nouveur livreur
-  app.get("/createdeliveryman", async (req, res) => {
-    res.render("createdeliveryman", {
-    });
-  });
+});
+
+// Page d'ajout d'un nouveur livreur
+app.get("/createdeliveryman", async (req, res) => {
+  res.render("createdeliveryman", {});
+});
 
 // Récupération de la requête d'ajout d'un livreur
 app.post("/createdeliveryman", async (req, res) => {
@@ -230,22 +233,18 @@ app.post("/createdeliveryman", async (req, res) => {
   console.log(req.body);
   console.log(newDMfirstname);
   //Appel de la fonction de création du nouveau livreur
-  const DMAdded = await newDM(
-    newDMfirstname,
-    newDMflastname
-  );
+  const DMAdded = await newDM(newDMfirstname, newDMflastname);
   //création affichée en console
   console.log(`Nouveau livreur ajouté ${newDMfirstname}`);
   res.redirect("/livreurs");
 });
 
-
 // Page édition d'un livreur
-app.get("/livreurs/edit/:id", async (req, res) => {
+app.get("/livreurs/edit/:dm_id", async (req, res) => {
   // Sélection du livreur à modifier grâce à son id présent dans l'HTML
   const [[getDMToEdit]] = await promisePool.execute(
-    `select * FROM delivery_men where id=?`,
-    [req.params.id]
+    `select * FROM delivery_men where dm_id=?`,
+    [req.params.dm_id]
   );
   // Vérification en console
   console.log(getDMToEdit);
@@ -260,10 +259,7 @@ app.post("/editDM", async (req, res) => {
   const DMfirstname = req.body.firstname;
   const DMflastname = req.body.lastname;
   console.log(req.body);
-  const dmEdited = await editDM(
-    DMfirstname,
-    DMflastname
-  );
+  const dmEdited = await editDM(DMfirstname, DMflastname);
   //Modification affichée en console
   console.log(`Livreur modifié ${DMfirstname}`);
   res.redirect("/livreurs");
@@ -277,49 +273,166 @@ app.post("/editDM", async (req, res) => {
 // Page de gestion des clients
 app.get("/clients", async (req, res) => {
   const allCustomers = await listCustomers();
+//  const allAdresses = await listCustomerAdresses();
+//  console.log(await listCustomers());
+//  console.log(await listCustomerAdresses());
   res.render("admin-customers", {
     customers: allCustomers,
+//    cust_adresses: allAdresses,
   });
+  //
 });
 
 // Page d'ajout d'un nouveau client
 app.get("/createcustomer", async (req, res) => {
-  res.render("createcustomer", {
-  });
+  res.render("createcustomer", {});
 });
 
 // Récupération de la requête d'ajout d'un client
 app.post("/createcustomer", async (req, res) => {
   console.log(req.body);
-//recupération des informations du nouveau client envoyé par la méthode POST
-const newCustomerFirstname = req.body.firstname;
-const newCustomerLastname = req.body.lastname;
-const newCustomerAdresse = req.body.adresse;
-const newCustomerEmail = req.body.email;
-const newCustomerPassword = req.body.password;
-// Vérification en console
-console.log(newCustomerFirstname);
-//Appel de la fonction de création du nouveau client
-const customerAdded = await newCustomer(newCustomerFirstname, newCustomerLastname, newCustomerAdresse, newCustomerEmail, newCustomerPassword);
-//création affichée en console
-console.log(`Nouveau client ajouté ${newCustomerFirstname}`);
-res.redirect("/clients");
+  //recupération des informations du nouveau client envoyé par la méthode POST
+  const newCustomerFirstname = req.body.firstname;
+  const newCustomerLastname = req.body.lastname;
+  const newCustomerAdresse = req.body.adresses;
+  const newCustomerEmail = req.body.email;
+  const newCustomerPassword = req.body.password;
+  // Vérification en console
+  // console.log(newCustomerFirstname);
+  //Appel de la fonction de création du nouveau client
+  const customerAdded = await newCustomer(
+    newCustomerFirstname,
+    newCustomerLastname,
+    newCustomerAdresse,
+    newCustomerEmail,
+    newCustomerPassword
+  );
+  //création affichée en console
+  // console.log(`Nouveau client ajouté ${newCustomerFirstname}`);
+  res.redirect("/clients");
 });
-
-
 
 // Page édition d'un client
-app.get("/customers/edit/:id", async (req, res) => {
-// Sélection du client à modifier grâce à son id présent dans l'HTML
-const [[getCustomerToEdit]] = await promisePool.execute(
-  `select * FROM customers where id=?`,
-  [req.params.id]
-);
-// Vérification en console
-console.log(getCustomerToEdit);
-res.render("editcustomer", {
-  // permet d'utiliser dans pug l'objet client sélectionné
-  customer: getCustomerToEdit,
-});
+app.get("/customers/edit/:cus_id", async (req, res) => {
+  // Sélection du client à modifier grâce à son id présent dans l'HTML
+  const [[getCustomerToEdit]] = await promisePool.execute(
+    `select * FROM customers where cus_id=?`,
+    [req.params.cus_id]
+  );
+  const [getCustomerAdressesToEdit] = await promisePool.execute(
+    `select * FROM customer_adresses where cus_id=?`,
+    [req.params.cus_id]
+  );
+  // Vérification en console
+  console.log(getCustomerToEdit);
+  console.log(getCustomerAdressesToEdit);
+
+  res.render("editcustomer", {
+    // permet d'utiliser dans pug l'objet client sélectionné
+    customer: getCustomerToEdit,
+    adresses: getCustomerAdressesToEdit
+  });
 });
 
+// Méthode de récupération du message d'édition
+app.post("/editcustomer", async (req, res) => {
+  console.log(req.body);
+  const customerId = req.body.cus_id;
+  const newcustomerFirstname = req.body.firstname;
+  const newcustomerLastname = req.body.lastname;
+  const newcustomerAdresses = req.body.adresses;
+  const newcustomerEmail = req.body.email;
+  const newcustomerPassword = req.body.password;
+  // Vérification en console
+  console.log(newcustomerFirstname);
+  //Appel de la fonction de modification du client
+  const customerAdded = await editCustomer(
+    customerId,
+    newcustomerFirstname,
+    newcustomerLastname,
+    newcustomerAdresses,
+    newcustomerEmail,
+    newcustomerPassword);
+  //Modification affichée en console
+  console.log(`Clients modifié ${newcustomerFirstname}`);
+  res.redirect("/clients");
+});
+
+// Méthode de récupération du message d'édition
+app.post("/addAdress", async (req, res) => {
+  console.log(req.body);
+  const customerId = req.body.cus_id;
+  const customerNewAdresse = req.body.newadresse;
+  // Vérification en console
+  //Appel de la fonction de modification du client
+  const customerAdded = await addAdress(
+    customerId,
+    customerNewAdresse,);
+  //Modification affichée en console
+  console.log(`Adresse ajoutée ${customerNewAdresse}`);
+  res.redirect("/clients");
+});
+
+
+
+
+// Méthode de réinitialisation du mot de passe
+app.post("/customers/reset", async (req, res) =>{
+  const customerPwId = req.body.cus_id;
+  const customerPwPw = req.body.password;
+  console.log(req.body);
+  const resetPassword = await resetCustomerPassword(customerPwPw, customerPwId);
+  res.redirect("/clients");
+});
+
+////// PAGES ET ACTIONS POUR LES COMMANDES
+//
+//
+//
+//
+// Page de gestion des commandes
+app.get("/commandes", async (req, res) => {
+  const allOrders = await listOrders();
+  res.render("admin-orders", {
+    orders: allOrders,
+  });
+});
+
+// Page de création d'une commande
+//
+app.get("/createorder", async (req, res) => {
+  const allPizzas = await listPizzas();
+  const allDM = await listDM();
+  const allCustomers = await listCustomers();
+  res.render("createorder", {
+    // permet d'utiliser les informations vers la pages PUG
+    pizzas: allPizzas,
+    dMen: allDM,
+    customers: allCustomers,
+  });
+});
+
+// Récupération de la requête de création d'une commande
+//
+app.post("/createorder", async (req, res) => {
+  //recupération des informations de la nouvelle pizza envoyé par la méthode POST
+  console.log(req.body);
+  //const newPizzaId = req.body.id;
+  const newOrderDm = req.body.dm_id;
+  const newOrderCus = req.body.cus_id;
+  const newOrderPizz = req.body.pizz_id;
+  const newOrderQtPizz = req.body.pizz_qt;
+  const newOrderSts = req.body.status;
+  const newOrderAdresse = req.body.adresses;
+  // Vérification en console
+  console.log(newOrderDm);
+  //Appel de la fonction de création de la nouvelle pizza
+  const pizzaAdded = await newOrder(
+    newOrderDm,
+    newOrderCus,
+    newOrderPizz,
+    newOrderQtPizz,
+    newOrderSts,
+    newOrderAdresse
+  );
+});

@@ -15,7 +15,7 @@ article {
       margin-right: 10px;
       td {
         min-width: 150px;
-        input{
+        input {
           width: 200px;
         }
         button {
@@ -27,6 +27,7 @@ article {
           margin-right: 10px;
           text-transform: uppercase;
           align-self: flex-end;
+
           &:hover {
             background-color: rgb(205, 249, 143);
             color: rgb(255, 68, 0);

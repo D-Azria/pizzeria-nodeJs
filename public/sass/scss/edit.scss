@@ -1,33 +1,45 @@
-form {
+#editcustomers {
   display: flex;
-  flex-direction: column;
-  margin-top: 20px;
+  flex-direction: row;
+  gap: 25px;
 
-  div {
-    text-align: right;
-    padding: 5px;
-    width: 500px;
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    border-left: solid black 1px;
+    padding-left: 5px;
+    
+    div {
+      text-align: right;
+      padding: 5px;
+      width: 400px;
+      
+      h3{
+        text-align: left;
+      }
 
-    label{
+      label{
         float: left;
         margin-right: 5px;
-    }
-    input{
+      }
+      input{
         width: 300px;
-    }
-
-    button {
-      background-color: rgb(107, 183, 0);
-      color: rgb(253, 222, 211);
-      border-radius: 5px;
-      border: 1px solid rgb(253, 222, 211);
-      padding: 10px;
-      margin-right: 10px;
-      text-transform: uppercase;
-      align-self: flex-end;
-      &:hover {
-        background-color: rgb(205, 249, 143);
-        color: rgb(255, 68, 0);
+      }
+      
+      button {
+        background-color: rgb(107, 183, 0);
+        color: rgb(253, 222, 211);
+        border-radius: 5px;
+        border: 1px solid rgb(253, 222, 211);
+        padding: 10px;
+        margin-right: 10px;
+        text-transform: uppercase;
+        align-self: flex-end;
+        &:hover {
+          background-color: rgb(205, 249, 143);
+          color: rgb(255, 68, 0);
+        }
       }
     }
   }
