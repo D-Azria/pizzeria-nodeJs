@@ -47,6 +47,10 @@ html
                                     
                                     label(for="pizz_qt") Quantité :
                                     input(type="number" name="pizz_qt" id="pizz_qt" value="1")
+                                    button(id="addPizzaButton" type="button" value=1) Ajouter une pizza                            
+                            tr
+                                td(colspan=2)
+                                    div(id="divAddPizza") 
                             tr 
                                 td 
                                     label(for="status") Statut :
@@ -59,9 +63,9 @@ html
                                 td 
                                     label(for="adresses") Adresse :
                                 td
-                                    select(type="text" name="adresses" id="adresses")
-                                        each adresse in adresses
-                                            option(id=`${adresse.cus_id}` value=`${adresse.adresse}`) #{adresse.adresse}                            
+                                    select(id="adresses" type="text" name="adresses")
+                                        
+                          
                             tr 
                                 td
                                     label(for="price") Prix total :
@@ -74,4 +78,5 @@ html
             aside 
                 h3 Aside title
                 p Text aside : Lorem ipsum dolor sit amet consectetur adipisicing elit. Error fugit animi eveniet sint iusto optio, ut inventore aspernatur deleniti quasi ratione omnis voluptatum debitis sunt deserunt possimus blanditiis velit reiciendis?
+                div
         footer

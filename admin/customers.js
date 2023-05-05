@@ -70,6 +70,12 @@ export async function listCustomerAdresses() {
   return rows;
 }
 
+//fonction qui permet d'accéder aux adresses d'un seul client
+export async function listSingleCustomerAdresses(cus_id) {
+  const [rows] = await promisePool.execute("SELECT * FROM customer_adresses WHERE cus_id=?", [cus_id]);
+  return rows;
+}
+
 // fonction qui permet de créer un nouveau client dans la BD pizzeria table customers
 export async function newCustomer(
   firstname,

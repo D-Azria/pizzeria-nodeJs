@@ -69,6 +69,7 @@ async function editDM(firstname, lastname) {
 ////// FONCTIONS POUR LES CLIENTS
 import { listCustomers } from "./admin/customers.js";
 import { listCustomerAdresses} from "./admin/customers.js";
+import { listSingleCustomerAdresses } from "./admin/customers.js";
 import { newCustomer } from "./admin/customers.js";
 import { editCustomer } from "./admin/customers.js";
 import { addAdress } from "./admin/customers.js";
@@ -476,3 +477,22 @@ app.post("/createorder", async (req, res) => {
     newOrderAdresse
   );
 });
+
+
+ app.get("/selectedCustomer/:id", async (req, res) => {
+  console.log(req.params.id);
+  const cus_id = req.params.id;
+  const getAdressesOfSelectedCustomer = await listSingleCustomerAdresses(cus_id);
+  console.log(getAdressesOfSelectedCustomer);
+  res.json(getAdressesOfSelectedCustomer);
+  return getAdressesOfSelectedCustomer;
+ });
+
+app.get("/addpizza", async (req, res) => {
+  const addPizzaToOrder = await listPizzas();
+  console.log(addPizzaToOrder);
+  res.json(addPizzaToOrder);
+  return addPizzaToOrder;
+ });
+
+ 
