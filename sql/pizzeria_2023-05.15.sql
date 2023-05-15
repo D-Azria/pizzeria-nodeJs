@@ -39,7 +39,7 @@ ord_id int NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'ID de commande',
 cust_id int NOT NULL,
 delivery_id int NOT NULL,
 status SET('ENREGISTRE', 'EN_COURS_DE_LIVRAISON', 'LIVRE') COMMENT 'Statut',
-adresse TEXT COMMENT 'Adresse',
+ord_adresse TEXT COMMENT 'Adresse',
 FOREIGN KEY (cust_id) REFERENCES customers(cus_id),
 FOREIGN KEY (delivery_id) REFERENCES delivery_men(dm_id)
 );
