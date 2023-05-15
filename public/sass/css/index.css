@@ -11,7 +11,7 @@ html a:hover {
 html header {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
 }
@@ -25,6 +25,7 @@ html header img {
 html header div {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 html header div h1 {
   align-self: center;
@@ -32,6 +33,7 @@ html header div h1 {
 }
 html header div ul {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   background-color: azure;
   border-radius: 10px;

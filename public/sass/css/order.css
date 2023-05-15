@@ -1,0 +1,109 @@
+#allPizzas {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+#allPizzas .eachPizza {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+  width: 150px;
+  height: 200px;
+}
+#allPizzas .eachPizza .qtPizza {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#allPizzas .eachPizza .qtPizza .less {
+  background-color: rgb(183, 6, 0);
+  color: rgb(253, 222, 211);
+  border-radius: 5px;
+  border: 1px solid rgb(253, 222, 211);
+  padding: 10px;
+  margin: 10px;
+  text-transform: uppercase;
+  align-self: flex-end;
+}
+#allPizzas .eachPizza .qtPizza .less:hover {
+  background-color: rgb(249, 143, 143);
+  color: rgb(255, 68, 0);
+}
+#allPizzas .eachPizza .qtPizza .more {
+  background-color: rgb(107, 183, 0);
+  color: rgb(253, 222, 211);
+  border-radius: 5px;
+  border: 1px solid rgb(253, 222, 211);
+  padding: 10px;
+  margin: 10px;
+  text-transform: uppercase;
+  align-self: flex-end;
+}
+#allPizzas .eachPizza .qtPizza .more:hover {
+  background-color: rgb(205, 249, 143);
+  color: rgb(23, 90, 1);
+}
+#allPizzas .eachPizza .qtPizza #pizz_qt {
+  width: 40px;
+  height: 30px;
+}
+
+.pizzLabel {
+  white-space: nowrap;
+}
+
+#customer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 5px;
+  margin: 10px;
+  gap: 10px;
+}
+#customer #adresses {
+  width: 250px;
+}
+
+#delivery {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 5px;
+  margin: 10px;
+  gap: 10px;
+}
+
+#order {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 5px;
+  margin: 10px;
+  gap: 10px;
+}
+#order #orderPrice {
+  font-size: 1.5em;
+}
+#order #buttoncreateorder {
+  background-color: rgb(107, 183, 0);
+  color: rgb(253, 222, 211);
+  border-radius: 5px;
+  border: 1px solid rgb(253, 222, 211);
+  padding: 10px;
+  margin-right: 10px;
+  text-transform: uppercase;
+  align-self: flex-end;
+}
+#order #buttoncreateorder:hover {
+  background-color: rgb(205, 249, 143);
+  color: rgb(255, 68, 0);
+}
+
+/*# sourceMappingURL=order.css.map */

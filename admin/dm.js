@@ -29,7 +29,7 @@ export async function listDM() {
 // fonction qui permet de créer un nouveau serveur dans la BD pizzeria, table delivery_men
 export async function newDM(firstname, lastname) {
   const [rows] = await promisePool.execute(
-    "insert into delivery_men(firstname, lastname) values(?,?)",
+    "insert into delivery_men(dm_firstname, dm_lastname) values(?,?)",
     [firstname, lastname]
   );
   return rows;
@@ -37,7 +37,7 @@ export async function newDM(firstname, lastname) {
 // permet d'éditer les livreurs en fonction de l'id qui reste fixe
 export async function editDM(firstname, lastname) {
   const [rows] = await promisePool.execute(
-    "insert into delivery_men(firstname, lastname) values(?,?)",
+    "insert into delivery_men(dm_firstname, dm_lastname) values(?,?)",
     [firstname, lastname]
   );
   return rows;

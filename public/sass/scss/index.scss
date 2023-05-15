@@ -26,6 +26,7 @@ html {
     div {
       display: flex;
       flex-direction: column;
+      flex-wrap: wrap;
       h1 {
         align-self: center;
         font-size: 1.2em;

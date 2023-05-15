@@ -30,8 +30,8 @@ html
                         each dman in dMen 
                             tr
                                 td #{dman.dm_id}
-                                td #{dman.firstname}
-                                td #{dman.lastname}
+                                td #{dman.dm_firstname}
+                                td #{dman.dm_lastname}
                                 td(class="actions")  
                                     a(href=`/livreurs/edit/${dman.dm_id}`)
                                         button(type="submit" class="modify") Editer

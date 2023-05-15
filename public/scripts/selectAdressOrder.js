@@ -15,58 +15,56 @@ function createMarkup(markup_name, text, parent, attributes = []) {
 }
 
 function clearAdresses() {
-    // Selection des options d'adresses. La longueur détermine le nombre de tour de boucle.
-    let i = document.querySelectorAll(".adressesoptions").length;
-    while (i > 0) {
-      //suppression des éléments du DOM avec la classe adressesoptions
-      document.querySelector(".adressesoptions").remove();
-      i--;
-    }
+  // Selection des options d'adresses. La longueur détermine le nombre de tour de boucle.
+  let i = document.querySelectorAll(".adressesoptions").length;
+  while (i > 0) {
+    //suppression des éléments du DOM avec la classe adressesoptions
+    document.querySelector(".adressesoptions").remove();
+    i--;
   }
-
-function clearPizza() {
-    // Selection des options d'adresses. La longueur détermine le nombre de tour de boucle.
-    let td
-    let i = document.querySelectorAll(".morepizza").length;
-    while (i > 0) {
-      //suppression des éléments du DOM avec la classe morepizza
-      document.querySelector(".morepizza").remove();
-      i--;
-    }
-  }
-
+}
 
 const selectCustomer = document.getElementById("cus_id");
 const optionsAdresses = document.getElementById("adresses");
+// Faire apparaître les adresses des clients au clic sur le nom du client
 selectCustomer.onchange = async function (event) {
   event.preventDefault();
   let c_id = selectCustomer.value;
-  console.log(`Tiptop`);
-  console.log(c_id);
-  await clearAdresses();
+  clearAdresses();
   fetch(`/selectedCustomer/${c_id}`, { method: "GET" })
     .then((response) => {
       if (response.status !== 200) {
         throw new Error("Le serveur ne répond pas !");
-        //récupération des départements sous forme d'un object json
+        //récupération des adresses sous forme d'un object json
       } else {
-        console.log(response.json);
         return response.json();
       }
     })
     .then((adresses) => {
       adresses.forEach((adresse) => {
-        //        console.log(optionsAdresses);
-        console.log(adresse);
         createMarkup("option", `${adresse.adresse}`, optionsAdresses, [
-          { name: "id", value: `${adresse.cus_id}` },
-          { name: "value", value: `${adresse.cus_id}` },
-          { name: "class", value: "adressesoptions"},
+          { name: "id", value: `${adresse.addresse_id}` },
+          { name: "value", value: `${adresse.addresse_id}` },
+          { name: "class", value: "adressesoptions" },
         ]);
       });
     })
     .catch((error) => console.log(`Erreur catched :`, error));
 };
+
+/* 
+  // Ancienne procédure pour ajouter des pizzas à la commande
+  
+function clearPizza() {
+      // Selection des options d'adresses. La longueur détermine le nombre de tour de boucle.
+      let td
+      let i = document.querySelectorAll(".morepizza").length;
+      while (i > 0) {
+        //suppression des éléments du DOM avec la classe morepizza
+        document.querySelector(".morepizza").remove();
+        i--;
+      }
+    } 
 
 const addPizzaButton = document.getElementById("addPizzaButton");
 const divAddPizza = document.getElementById("divAddPizza");
@@ -132,4 +130,4 @@ addPizzaButton.onclick = async function (event) {
     event.preventDefault();
     console.log('boum');
 
-  }
+  } */

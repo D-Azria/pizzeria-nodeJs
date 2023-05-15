@@ -56,14 +56,6 @@ export async function listCustomers() {
   return mergedCustomers;
 }
 
-
-/* 
-export async function listCustomers() {
-  const [rows] = await promisePool.execute("select * from customers"); 
-  return rows;
-}
-*/
-
 //fonction qui permet d'accéder aux adresses des clients
 export async function listCustomerAdresses() {
   const [rows] = await promisePool.execute("select * from customer_adresses");
@@ -159,9 +151,9 @@ export async function addAdress(cus_id, adresses) {
   return rows;
 }
 
-export async function resetCustomerPassword(pwToHash, cus_id) {
+export async function resetCustomerPassword(passwordToHash, cus_id) {
   const salt = bcrypt.genSaltSync(saltRounds);
-  const password = bcrypt.hashSync(pwToHash, salt);
+  const password = bcrypt.hashSync(passwordToHash, salt);
   const [rows] = await promisePool.execute(
     "UPDATE customers SET password=? WHERE cus_id=?",
     [password, cus_id]

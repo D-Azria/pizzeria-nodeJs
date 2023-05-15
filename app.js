@@ -68,7 +68,7 @@ async function editDM(firstname, lastname) {
 
 ////// FONCTIONS POUR LES CLIENTS
 import { listCustomers } from "./admin/customers.js";
-import { listCustomerAdresses} from "./admin/customers.js";
+import { listCustomerAdresses } from "./admin/customers.js";
 import { listSingleCustomerAdresses } from "./admin/customers.js";
 import { newCustomer } from "./admin/customers.js";
 import { editCustomer } from "./admin/customers.js";
@@ -80,7 +80,8 @@ import { deleteCustomerAdresses } from "./admin/customers.js";
 ////// FONCTIONS POUR LES COMMANDES
 import { listOrders } from "./admin/orders.js";
 import { newOrder } from "./admin/orders.js";
-
+import { deleteOrder } from "./admin/orders.js";
+import { deletePizzaOrder } from "./admin/orders.js";
 
 //////////     PARTIE CONNECTION
 //////
@@ -100,7 +101,6 @@ const pool = mysql.createPool({
 
 // La connexion à la base de données est établie
 const promisePool = pool.promise();
-
 
 //////////     PARTIE WEB
 //////
@@ -210,9 +210,7 @@ app.post("/editpizza", async (req, res) => {
     pizzaPrice,
     pizzaVersion
   );
-  const oldPizzaDeleted = await deletePizza(
-    pizzaId
-  )
+  const oldPizzaDeleted = await deletePizza(pizzaId);
   //Modification affichée en console
   console.log(`Pizza ${pizzaLabel} modifiée`);
   res.redirect("/pizzas");
@@ -247,8 +245,8 @@ app.get("/createdeliveryman", async (req, res) => {
 // Récupération de la requête d'ajout d'un livreur
 app.post("/createdeliveryman", async (req, res) => {
   //recupération des informations du nouveau livreur envoyé par la méthode POST
-  const newDMfirstname = req.body.firstname;
-  const newDMflastname = req.body.lastname;
+  const newDMfirstname = req.body.dm_firstname;
+  const newDMflastname = req.body.dm_lastname;
   // Vérification en console
   console.log(req.body);
   console.log(newDMfirstname);
@@ -276,8 +274,8 @@ app.get("/livreurs/edit/:dm_id", async (req, res) => {
 
 // Méthode de récupération du message de modification d'un livreur
 app.post("/editDM", async (req, res) => {
-  const DMfirstname = req.body.firstname;
-  const DMflastname = req.body.lastname;
+  const DMfirstname = req.body.dm_firstname;
+  const DMflastname = req.body.dm_lastname;
   console.log(req.body);
   const dmEdited = await editDM(DMfirstname, DMflastname);
   //Modification affichée en console
@@ -380,7 +378,7 @@ app.post("/editcustomer", async (req, res) => {
     newcustomerLastname,
     newcustomerAdresses,
     newcustomerEmail,
-    newcustomerPassword,
+    newcustomerPassword
   );
   //Modification affichée en console
   console.log(`Clients modifié ${newcustomerFirstname}`);
@@ -409,13 +407,12 @@ app.post("/customers/reset", async (req, res) => {
   res.redirect("/clients");
 });
 
-
 // Méthode pour supprimer les clients et leurs adresses
 app.post("/clients/delete/:id", async (req, res) => {
   const cus_id = req.params.id;
   console.log(cus_id);
-  const customerDeleted = await deleteCustomer(cus_id);
   const customerAdressesDeleted = await deleteCustomerAdresses(cus_id);
+  const customerDeleted = await deleteCustomer(cus_id);
   res.redirect("/clients");
 });
 
@@ -426,7 +423,50 @@ app.post("/clients/delete/:id", async (req, res) => {
 //
 // Page de gestion des commandes
 app.get("/commandes", async (req, res) => {
-  const allOrders = await listOrders();
+  const getOrders = await listOrders();
+  const allOrders = [];
+  for (const orders of getOrders) {
+    const ord_id = orders.ord_id;
+    const dm_firstname = orders.dm_firstname;
+    const dm_lastname = orders.dm_lastname;
+    const firstname = orders.firstname;
+    const lastname = orders.lastname;
+    const status = orders.status;
+    const adresse = orders.adresse;
+    const label = orders.label.split(", ");
+    const price = orders.price.split(", ");
+    // Permet de mettre pizz_qt en String. Lorsqu'il y a un seul nombre, un seul type de pizzas dans la commande, le code ne marche plus.
+    let pizz_qt = orders.pizz_qt;
+    if (typeof pizz_qt === "number") {
+      pizz_qt = [pizz_qt.toString()];
+    } else if (typeof pizz_qt === "string") {
+      pizz_qt = pizz_qt.split(", ");
+    } else {
+      pizz_qt = [];
+    }
+
+    const prices = [];
+    for (let i = 0; i < price.length; i++) {
+      prices.push(price[i] * pizz_qt[i]);
+    }
+    const totalPrice = prices.reduce((a, b) => a + b, 0);
+
+    const order = {
+      ord_id,
+      dm_firstname,
+      dm_lastname,
+      firstname,
+      lastname,
+      status,
+      adresse,
+      label,
+      price,
+      pizz_qt,
+      totalPrice,
+    };
+    allOrders.push(order);
+  }
+
   res.render("admin-orders", {
     orders: allOrders,
   });
@@ -439,11 +479,6 @@ app.get("/createorder", async (req, res) => {
   const allDM = await listDM();
   const allCustomers = await listCustomers();
   const allAdresses = await listCustomerAdresses();
-for (const adresse of allAdresses){
-  console.log(`Adresse client ${adresse.cus_id} :`, adresse.adresse);
-}
-  console.log(allAdresses);
-
   res.render("createorder", {
     // permet d'utiliser les informations vers la pages PUG
     pizzas: allPizzas,
@@ -457,7 +492,7 @@ for (const adresse of allAdresses){
 //
 app.post("/createorder", async (req, res) => {
   //recupération des informations de la nouvelle pizza envoyé par la méthode POST
-  console.log(req.body);
+  console.log(`Requete Création COmmande`, req.body);
   //const newPizzaId = req.body.id;
   const newOrderDm = req.body.dm_id;
   const newOrderCus = req.body.cus_id;
@@ -466,7 +501,7 @@ app.post("/createorder", async (req, res) => {
   const newOrderSts = req.body.status;
   const newOrderAdresse = req.body.adresses;
   // Vérification en console
-  console.log(newOrderDm);
+  console.log(`Adresse de la commande`, newOrderAdresse);
   //Appel de la fonction de création de la nouvelle pizza
   const pizzaAdded = await newOrder(
     newOrderDm,
@@ -476,23 +511,22 @@ app.post("/createorder", async (req, res) => {
     newOrderSts,
     newOrderAdresse
   );
+  res.redirect("/commandes");
 });
 
-
- app.get("/selectedCustomer/:id", async (req, res) => {
+app.get("/selectedCustomer/:id", async (req, res) => {
   console.log(req.params.id);
   const cus_id = req.params.id;
-  const getAdressesOfSelectedCustomer = await listSingleCustomerAdresses(cus_id);
-  console.log(getAdressesOfSelectedCustomer);
+  const getAdressesOfSelectedCustomer = await listSingleCustomerAdresses(
+    cus_id
+  );
   res.json(getAdressesOfSelectedCustomer);
   return getAdressesOfSelectedCustomer;
- });
+});
 
-app.get("/addpizza", async (req, res) => {
-  const addPizzaToOrder = await listPizzas();
-  console.log(addPizzaToOrder);
-  res.json(addPizzaToOrder);
-  return addPizzaToOrder;
- });
-
- 
+app.post("/orders/delete/:id", async (req, res) => {
+  const order_id = req.params.id;
+  await deletePizzaOrder(order_id);
+  await deleteOrder(order_id);
+  res.redirect("/commandes");
+});
